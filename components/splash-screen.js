@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
-export default Home = (props) => {
+const Home = (props) => {
   return(
     <View style={styles.container}>
       <View style={styles.header}>
@@ -52,3 +52,5 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   }
 });
+
+export default Home
