@@ -8,7 +8,7 @@ import Calculation from './calculation.js';
 const Tabs = () => {
 
   return(
-    <Calculation />
+    <Notification />
   )
 }
 
