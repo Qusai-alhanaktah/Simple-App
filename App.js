@@ -2,12 +2,12 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Home from './components/splash-screen.js'
+import Tabs from './components/tabs.js'
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Home />
-      <StatusBar style="auto" />
+      <Tabs />
     </View>
   );
 }

@@ -2,14 +2,44 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Button, Modal, TextInput } from 'react-native';
 
 const Home = (props) => {
-  const [showSignUpForm, setShowSignUpForm] = useState(false)
-  const [showSignInForm, setShowSignInForm] = useState(false)
+  const [showSignUpForm, setShowSignUpForm] = useState(false);
+  const [showSignInForm, setShowSignInForm] = useState(false);
+  const [showForgetPasswordForm, setShowForgetPasswordForm] = useState(false);
+  const [showCreatePasswordForm, setShowCreatePasswordForm] = useState(false);
+  const [userData, setUserData] = useState({});
 
   const signIn = () => {
 
   }
 
   const signUp = () => {
+    // fetch('http://localhost:8000/signup', {
+    //   method: 'post',
+    //   mode: 'cors',
+    //   cache: 'no-cache',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: userData ? JSON.stringify(userData) : undefined,
+    // })
+    // .then(response =>  response.text())
+    // .then(data =>{
+    //   dispatch ({
+    //     type: LOGUP,
+    //     payload: {token: data.token, loggedIn: true, loading: false, user: data.user, message: data.message},
+    //   });
+    //   let storage = [['user', JSON.stringify(newUser)], ['access_token', token]];
+    //       AsyncStorage.multiSet(storage, (error)=> {
+    //           if(error) alert("error!");
+    //           else alert("Welcome "+ newUser.username +" !");
+    //       });
+    //
+    // });
+  }
+
+  const forgetPassword = () => {
+
+  }
+
+  const createPassword = () => {
 
   }
 
@@ -22,37 +52,74 @@ const Home = (props) => {
         <Text style={styles.text}>Welcome To My App</Text>
         <Button title="Get Started" color="gray" onPress = { ()=> setShowSignUpForm(true) }/>
       </View>
-      <Modal visible={showSignUpForm} style={styles.modal}>
-        <Button onPress={()=> setShowSignUpForm(false)} title="X" color='red'/>
-        <Text>Sign Up</Text>
-        <View>
-          <Text>UserName:</Text>
-          <TextInput placeholder='Type Your Username' style={styles.modalText} onChangeText={(value)=> setUser({...user, 'username': value})}/>
+      <Modal visible={showSignUpForm} animationType="slide" transparent={true}>
+        <View style={styles.modal}>
+          <View style={styles.closeButton}>
+            <Button onPress={()=> setShowSignUpForm(false)} title="X" color='black'/>
+          </View>
+          <Text style={styles.modalHeader}>Sign Up</Text>
+          <View style={styles.fields}>
+            <Text>UserName:</Text>
+            <TextInput placeholder='Type Your Username' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'username': value})}/>
+            <Text>Password:</Text>
+            <TextInput placeholder='Type Your Password' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'password': value})}/>
+            <Text>Email:</Text>
+            <TextInput placeholder='Type Your Email' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'email': value})}/>
+          </View>
+          <Button onPress={()=> {setShowSignUpForm(false); signUp()}} title="Submit" color='green'/>
+          <View style={styles.swapModal}>
+            <Text onPress={ ()=> { setShowSignUpForm(false); setShowSignInForm(true) }} style={styles.swapModalText}>I have account, Sign In</Text>
+          </View>
         </View>
-        <View>
-          <Text>Password:</Text>
-          <TextInput placeholder='Type Your Password' style={styles.modalText} onChangeText={(value)=> setUser({...user, 'password': value})}/>
-        </View>
-        <View>
-          <Text>Email:</Text>
-          <TextInput placeholder='Type Your Email' style={styles.modalText} onChangeText={(value)=> setUser({...user, 'email': value})}/>
-        </View>
-        <Button onPress={()=> {setShowSignUpForm(false); signUp()}} title="Submit" color='#eeff41'/>
-        <Text onPress={ ()=> { setShowSignUpForm(false); setShowSignInForm(true) }}>Sign In</Text>
       </Modal>
-      <Modal visible={showSignInForm} style={styles.modal}>
-        <Button onPress={()=> setShowSignInForm(false)} title="X" color='red'/>
-        <Text>Sign In</Text>
-        <View>
-          <Text>UserName:</Text>
-          <TextInput placeholder='Type Your Username' style={styles.modalText} onChangeText={(value)=> setUser({...user, 'username': value})}/>
+      <Modal visible={showSignInForm} animationType="slide" transparent={true}>
+        <View style={styles.modal}>
+          <View style={styles.closeButton}>
+            <Button onPress={()=> setShowSignInForm(false)} title="X" color='black'/>
+          </View>
+          <Text style={styles.modalHeader}>Sign In</Text>
+          <View style={styles.fields}>
+            <Text>UserName:</Text>
+            <TextInput placeholder='Type Your Username' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'username': value})}/>
+            <Text>Password:</Text>
+            <TextInput placeholder='Type Your Password' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'password': value})}/>
+          </View>
+          <Button onPress={()=> {setShowSignInForm(false); signIn()}} title="Submit" color='green'/>
+          <View style={styles.swapModal}>
+            <Text onPress={ ()=> { setShowSignInForm(false); setShowSignUpForm(true) }} style={styles.swapModalText}>Don't have account, Sign Up</Text>
+            <Text onPress={ ()=> { setShowSignInForm(false); setShowForgetPasswordForm(true) }} style={styles.swapModalText}>Forget my password !!</Text>
+          </View>
         </View>
-        <View>
-          <Text>Password:</Text>
-          <TextInput placeholder='Type Your Password' style={styles.modalText} onChangeText={(value)=> setUser({...user, 'password': value})}/>
+      </Modal>
+      <Modal visible={showForgetPasswordForm} animationType="slide" transparent={true}>
+        <View style={styles.modal}>
+          <View style={styles.closeButton}>
+            <Button onPress={()=> setShowForgetPasswordForm(false)} title="X" color='black'/>
+          </View>
+          <Text style={styles.modalHeader}>Forget my password</Text>
+          <View style={styles.fields}>
+            <Text>UserName:</Text>
+            <TextInput placeholder='Type Your Username' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'username': value})}/>
+            <Text>Email:</Text>
+            <TextInput placeholder='Type Your Email' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'email': value})}/>
+          </View>
+          <Button onPress={()=> {setShowForgetPasswordForm(false); forgetPassword()}} title="Submit" color='green'/>
         </View>
-        <Button onPress={()=> {setShowSignInForm(false); signIn()}} title="Submit" color='#eeff41'/>
-        <Text onPress={ ()=> { setShowSignInForm(false); setShowSignUpForm(true) }}>Sign Up</Text>
+      </Modal>
+      <Modal visible={showCreatePasswordForm} animationType="slide" transparent={true}>
+        <View style={styles.modal}>
+          <View style={styles.closeButton}>
+            <Button onPress={()=> setShowCreatePasswordForm(false)} title="X" color='black'/>
+          </View>
+          <Text style={styles.modalHeader}>Create a new Password</Text>
+          <View style={styles.fields}>
+            <Text>Password:</Text>
+            <TextInput placeholder='Type Your New Password' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'username': value})}/>
+            <Text>Confirm Password:</Text>
+            <TextInput placeholder='Type Your New Password again' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'email': value})}/>
+          </View>
+          <Button onPress={()=> {setShowCreatePasswordForm(false); createPassword()}} title="Submit" color='green'/>
+        </View>
       </Modal>
     </View>
   );
@@ -64,7 +131,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#00D068'
   },
   modal: {
-
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 150,
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
 
   header: {
@@ -85,7 +167,7 @@ const styles = StyleSheet.create({
   starting: {
     flex: 0.3,
     marginVertical: 30,
-    backgroundColor: '#C6FFE3',
+    backgroundColor: '#98FFA9',
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
@@ -96,7 +178,40 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     marginVertical: 30,
-  }
+  },
+
+  modalText: {
+    width: 250,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderRadius: 20,
+    fontSize: 15,
+    textAlign: 'center',
+  },
+
+  fields: {
+    marginVertical: 20,
+  },
+
+  closeButton: {
+    width: '100%',
+    alignItems: 'flex-end',
+  },
+
+  swapModal: {
+    width: '100%',
+    alignItems: 'flex-start',
+    paddingTop: 30,
+  },
+
+  modalHeader: {
+    fontSize: 23,
+  },
+
+  swapModalText: {
+    color: 'blue',
+    paddingVertical: 5,
+  },
 });
 
 export default Home
