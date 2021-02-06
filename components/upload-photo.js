@@ -25,17 +25,17 @@ export default function PhotoUploaded() {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#00D068', }}>
+      <Button title="Pick an image" onPress={pickImage} color = "gray" />
+      { image &&
+        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+      }
     </View>
   );
 }

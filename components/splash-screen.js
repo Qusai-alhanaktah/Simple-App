@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Button, Modal, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, Modal, TextInput, AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
+import { logUp, logIn } from './action.js';
 
 const Home = (props) => {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
@@ -9,29 +11,38 @@ const Home = (props) => {
   const [userData, setUserData] = useState({});
 
   const signIn = () => {
-
+    props.logIn(userData)
+    if(props.loggedIn) {
+      props.isLogedIn(props.token)
+      alert("Welcome "+ props.user.username +" !");
+    }
+    // let storage = [['user', JSON.stringify(props.user)], ['access_token', props.token]];
+    // AsyncStorage.multiSet(storage, (error)=> {
+    //   if(error) alert("error!");
+    //   else {
+    //   };
+    // });
+    // if(props.loggedIn) {
+    //   props.isLogedIn(props.token)
+    //   alert("Welcome "+ props.user.username +" !");
+    // }
   }
 
   const signUp = () => {
-    // fetch('http://localhost:8000/signup', {
-    //   method: 'post',
-    //   mode: 'cors',
-    //   cache: 'no-cache',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: userData ? JSON.stringify(userData) : undefined,
-    // })
-    // .then(response =>  response.text())
-    // .then(data =>{
-    //   dispatch ({
-    //     type: LOGUP,
-    //     payload: {token: data.token, loggedIn: true, loading: false, user: data.user, message: data.message},
-    //   });
-    //   let storage = [['user', JSON.stringify(newUser)], ['access_token', token]];
-    //       AsyncStorage.multiSet(storage, (error)=> {
-    //           if(error) alert("error!");
-    //           else alert("Welcome "+ newUser.username +" !");
-    //       });
-    //
+    props.logUp(userData);
+    if(props.loggedIn) {
+      props.isLogedIn(props.token)
+      alert("Welcome !");
+    }
+    // let storage = [['user', JSON.stringify(props.user)], ['access_token', props.token]];
+    // AsyncStorage.multiSet(storage, (error)=> {
+    //   if(error) alert("error!");
+    //   else {
+    //     if(props.loggedIn) {
+    //       props.isLogedIn(props.token)
+    //       alert("Welcome "+ props.user.username +" !");
+    //     }
+    //   };
     // });
   }
 
@@ -214,4 +225,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home
+const mapStateToProps = state => ({
+    user: state.authReducer.user,
+    loggedIn: state.authReducer.loggedIn,
+    loading: state.authReducer.loading,
+  });
+const mapDispatchToProps = { logUp, logIn };
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

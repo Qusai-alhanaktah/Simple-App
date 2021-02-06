@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#00D068',
     alignItems: "center",
-    top: 50
   },
 
   result: {
@@ -60,6 +59,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    top: 60,
     fontSize: 40,
     color: '#fff',
     fontWeight: 'bold',
