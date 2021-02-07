@@ -18,7 +18,7 @@ async function schedulePushNotification() {
       body: "You've got this notification from Qusai Al-hanaktah",
       data: { data: 'goes here' },
     },
-    trigger: { seconds: 2 },
+    trigger: { seconds: 1 },
   });
 }
 

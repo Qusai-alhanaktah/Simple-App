@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Button, Modal, TextInput, AsyncStorage } from 'react-native';
-import { connect } from 'react-redux';
-import { logUp, logIn } from './action.js';
+import base64 from 'react-native-base64';
 
 const Home = (props) => {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
@@ -11,47 +10,75 @@ const Home = (props) => {
   const [userData, setUserData] = useState({});
 
   const signIn = () => {
-    props.logIn(userData)
-    if(props.loggedIn) {
-      props.isLogedIn(props.token)
-      alert("Welcome "+ props.user.username +" !");
-    }
-    // let storage = [['user', JSON.stringify(props.user)], ['access_token', props.token]];
-    // AsyncStorage.multiSet(storage, (error)=> {
-    //   if(error) alert("error!");
-    //   else {
-    //   };
-    // });
-    // if(props.loggedIn) {
-    //   props.isLogedIn(props.token)
-    //   alert("Welcome "+ props.user.username +" !");
-    // }
+    let { username, password } = userData;
+    fetch('https://simple-app-qusai.herokuapp.com/signin', {
+      method: 'post',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: new Headers({
+        'Authorization': `Basic ${base64.encode(`${username}:${password}`)}`,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.access) props.isLogedIn(data);
+      alert(data.message);
+    });
   }
 
   const signUp = () => {
-    props.logUp(userData);
-    if(props.loggedIn) {
-      props.isLogedIn(props.token)
-      alert("Welcome !");
-    }
-    // let storage = [['user', JSON.stringify(props.user)], ['access_token', props.token]];
-    // AsyncStorage.multiSet(storage, (error)=> {
-    //   if(error) alert("error!");
-    //   else {
-    //     if(props.loggedIn) {
-    //       props.isLogedIn(props.token)
-    //       alert("Welcome "+ props.user.username +" !");
-    //     }
-    //   };
-    // });
+    fetch('https://simple-app-qusai.herokuapp.com/signup', {
+      method: 'post',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: { 'Content-Type': 'application/json' },
+      body: userData ? JSON.stringify(userData) : undefined,
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.access) props.isLogedIn(data);
+      alert(data.message);
+    });
   }
 
   const forgetPassword = () => {
-
+    fetch('https://simple-app-qusai.herokuapp.com/forgetPass', {
+      method: 'post',
+      mode: 'cors',
+      cache: 'no-cache',
+      headers: { 'Content-Type': 'application/json' },
+      body: userData ? JSON.stringify(userData) : undefined,
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.access) {
+        setUserData(data.user);
+        setShowCreatePasswordForm(true);
+      } else {
+        setShowForgetPasswordForm(false);
+        alert(data.message);
+      }
+    });
   }
 
   const createPassword = () => {
-
+    console.log(userData);
+    if (userData.confirmPassword === userData.password) {
+      fetch('https://simple-app-qusai.herokuapp.com/changePassword', {
+        method: 'post',
+        mode: 'cors',
+        cache: 'no-cache',
+        headers: { 'Content-Type': 'application/json' },
+        body: userData ? JSON.stringify(userData) : undefined,
+      })
+      .then(response => response.json())
+      .then(data => {
+        props.isLogedIn(data)
+        alert(data.message);
+      });
+    } else {
+      alert("Passwords didn't match")
+    }
   }
 
   return(
@@ -125,9 +152,9 @@ const Home = (props) => {
           <Text style={styles.modalHeader}>Create a new Password</Text>
           <View style={styles.fields}>
             <Text>Password:</Text>
-            <TextInput placeholder='Type Your New Password' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'username': value})}/>
+            <TextInput placeholder='Type Your New Password' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'password': value})}/>
             <Text>Confirm Password:</Text>
-            <TextInput placeholder='Type Your New Password again' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'email': value})}/>
+            <TextInput placeholder='Type Your New Password again' style={styles.modalText} onChangeText={(value)=> setUserData({...userData, 'confirmPassword': value})}/>
           </View>
           <Button onPress={()=> {setShowCreatePasswordForm(false); createPassword()}} title="Submit" color='green'/>
         </View>
@@ -225,11 +252,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => ({
-    user: state.authReducer.user,
-    loggedIn: state.authReducer.loggedIn,
-    loading: state.authReducer.loading,
-  });
-const mapDispatchToProps = { logUp, logIn };
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default Home;

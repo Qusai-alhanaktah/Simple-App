@@ -4,7 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 
 export default function PhotoUploaded() {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState('');
+  const [showImage, setShowImage] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -26,6 +27,7 @@ export default function PhotoUploaded() {
     });
 
     if (!result.cancelled) {
+      setShowImage(true);
       setImage(result.uri);
     }
   };
@@ -33,7 +35,7 @@ export default function PhotoUploaded() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#00D068', }}>
       <Button title="Pick an image" onPress={pickImage} color = "gray" />
-      { image &&
+      { showImage &&
         <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
       }
     </View>
