@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "simple-app",
+    "sdkVersion": "40.0.0",
     "slug": "simple-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,11 +18,14 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.qusai.simpleapp",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
       "useNextNotificationsApi": true,
-      "package": "com.qusai.simpleapp"
+      "package": "com.qusai.simpleapp",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
