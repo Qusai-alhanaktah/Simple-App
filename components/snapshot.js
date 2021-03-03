@@ -1,48 +1,35 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
-import { captureScreen } from 'react-native-view-shot';
 
 
 const SnapShot = () => {
   const [text, setText] = useState('');
-  const [savedImagePath, setSavedImagePath] = useState('');
-  const [showButton, setShowButton] = useState(false);
+  const [snapShot, setSnapShot] = useState('');
+  const [showSnapShot, setShowSnapShot] = useState(false);
 
-  const takeScreenShot = () => {
-    captureScreen({
-      format: 'jpg',
-      quality: 0.8,
-    }).then(
-      (uri) => {
-        setSavedImagePath(uri);
-        setShowButton(false);
-      },
-      (error) => console.error('Oops, Something Went Wrong', error),
-    );
+  const takeSnapShot = () => {
+    setSnapShot(text);
+    if (text.length > 0) setShowSnapShot(true);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>SnapShot</Text>
-      { !showButton &&
-        <Image
-          source={{uri: savedImagePath}}
-          style={{
-            width: 200,
-            height: 300,
-            resizeMode: 'contain',
-            marginTop: 5
-          }}
-        />
-      }
-      <TextInput placeholder='Type any text you want' style={styles.inputText} onChangeText = { value => { setText([...text, value]); setShowButton(true)} } />
-      { showButton &&
-        <TouchableOpacity style={styles.buttonStyle} onPress={takeScreenShot}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>SnapShot</Text>
+      </View>
+      <View style={styles.snapShot}>
+        {showSnapShot && (
+          <Text style={styles.snapShotText}>{snapShot}</Text>
+        )}
+      </View>
+      <View style={styles.fields}>
+        <TextInput placeholder='Type any text you want' style={styles.inputText} onChangeText = { value => setText(value) } />
+        <TouchableOpacity style={styles.buttonStyle} onPress={() => takeSnapShot()}>
           <Text style={styles.buttonTextStyle}>
             Take Screenshot
           </Text>
         </TouchableOpacity>
-      }
+      </View>
     </View>
   );
 };
@@ -52,14 +39,29 @@ export default SnapShot;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#00D068',
-    alignItems: "center",
+    backgroundColor: 'black',
   },
-
-  title: {
-    top: 50,
+  snapShot: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 20,
+  },
+  snapShotText: {
+    backgroundColor: '#98FFA9',
+    padding: 40,
+  },
+  header: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#98FFA9',
+    borderRadius: 100,
+    margin: 20,
+  },
+  headerText: {
     fontSize: 40,
-    color: '#fff',
+    color: 'black',
     fontWeight: 'bold',
   },
 
@@ -69,8 +71,7 @@ const styles = StyleSheet.create({
   },
   buttonStyle: {
     fontSize: 16,
-    color: 'white',
-    backgroundColor: 'gray',
+    backgroundColor: '#98FFA9',
     padding: 5,
     borderRadius: 20,
     minWidth: 150,
@@ -78,15 +79,18 @@ const styles = StyleSheet.create({
   },
   buttonTextStyle: {
     padding: 5,
-    color: 'white',
+    color: 'black',
     textAlign: 'center',
   },
+  fields: {
+    flex: 4,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   inputText: {
-    width: 250,
     backgroundColor: 'white',
-    borderStyle: 'solid',
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 10,
     fontSize: 15,
     textAlign: 'center',
   },

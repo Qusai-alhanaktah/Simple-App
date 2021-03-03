@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "940672497089",
+    "firebase_url": "https://simple-app-416f2-default-rtdb.firebaseio.com",
+    "project_id": "simple-app-416f2",
+    "storage_bucket": "simple-app-416f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940672497089:android:53b824951fe3ec1436eb40",
+        "android_client_info": {
+          "package_name": "com.simpleappcli"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "940672497089-tj0itrn502a9kghfv0k4redmmp7sbdnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAylfycHKzT1hhiU9Zs8FLAEnaqGM3n52o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "940672497089-tj0itrn502a9kghfv0k4redmmp7sbdnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

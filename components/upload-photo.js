@@ -1,43 +1,97 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
+import { StyleSheet, TouchableHighlight, Button, Image, View, Text } from 'react-native';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 export default function PhotoUploaded() {
   const [image, setImage] = useState('');
   const [showImage, setShowImage] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
-  }, []);
-
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    const option = {
+        NoData: true,
+    };
 
-    if (!result.cancelled) {
+    launchImageLibrary(option, response => {
+      setImage(response.uri);
       setShowImage(true);
-      setImage(result.uri);
-    }
+    });
+  };
+
+  const TakePhoto = async () => {
+    const option = {
+        NoData: true,
+    };
+
+    launchCamera(option, response => {
+      setImage(response.uri);
+      setShowImage(true);
+    });
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#00D068', }}>
-      <Button title="Pick an image" onPress={pickImage} color = "gray" />
-      { showImage &&
-        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
-      }
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Upload Image</Text>
+      </View>
+      <View style={styles.imageField}>
+        { showImage &&
+          <Image source={{ uri: image }} style={styles.image}/>
+        }
+      </View>
+      <View style={styles.body}>
+        <TouchableHighlight style={styles.button}>
+          <Text style={styles.buttonText} onPress={() => pickImage()}> Pick image</Text>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.button}>
+          <Text style={styles.buttonText} onPress={() => TakePhoto()}>Take photo</Text>
+        </TouchableHighlight>
+      </View>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
+  imageField: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+  },
+  image: {
+    height: 200,
+    width: 240,
+  },
+  header: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#98FFA9',
+    borderRadius: 100,
+    margin: 20,
+  },
+  headerText: {
+    fontSize: 40,
+    color: 'black',
+    fontWeight: 'bold',
+  },
+  body: {
+    flex: 3,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    margin: 50,
+  },
+  button: {
+    flex: 0.4,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  buttonText: {
+    backgroundColor: '#98FFA9',
+    padding: 10,
+    borderRadius: 50,
+    color: 'black'
+  },
+});
